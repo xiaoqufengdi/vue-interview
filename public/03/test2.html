@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>v-model事件名替换?</title>
+</head>
+
+<body>
+<div id="demo">
+    <!--v-model写法-->
+<!--
+    <my-component type="text" v-model="value"></my-component>
+-->
+        <!--展开语法糖后的写法-->
+<!--        <my-component type="text"
+                      :value="value"
+                      @input="value = $event.target.value"></my-component>-->
+
+    <custom-checkbox v-model="result"></custom-checkbox>
+    <span>状态：{{result}}</span>
+</div>
+<script src="../dist/vue.js"></script>
+<script>
+    Vue.component('CustomCheckbox', {
+        template: `
+      <div>
+        单选框：
+        <input
+          type="checkbox"
+          @change="$emit('change', $event.target.checked)"
+          :checked="checked"/>
+      </div>
+    `,
+        model: {
+            prop: 'checked',
+            event: 'change'
+        },
+        props: ['checked']
+    })
+    var demo = new Vue({
+        el: '#demo',
+        data: {
+            result: true
+        }
+    })
+
+</script>
+</body>
+
+</html>

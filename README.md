@@ -11,6 +11,9 @@
 5. [vue中组件之间的通信方式？](public/05/README.md)
 6. [简单说一说你对vuex理解？](public/06/README.md)
 
+7. https和http2的异同？
+8、自定义指令
+
 
 
 欢迎把你想听的题目以issue的方式提给我

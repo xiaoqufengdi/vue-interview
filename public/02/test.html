@@ -7,7 +7,7 @@
 
 <body>
     <div id="demo">
-        <p v-for="item in items" :key="item">{{item}}</p>
+        <p ref="p" v-for="item in items" :key="item">{{item}}</p>
     </div>
     <script src="../dist/vue.js"></script>
     <script>
@@ -16,8 +16,14 @@
             el: '#demo',
             data: { items: ['a', 'b', 'c', 'd', 'e'] },
             mounted () {
+                let p1 = this.$refs[2];
+                console.log(this.$refs[2]);
                 setTimeout(() => {
                     this.items.splice(2, 0, 'f')
+                    this.$nextTick(()=>{
+                        let p2 = this.$refs[2];
+                        console.log(p1 === p2);
+                    })
                 }, 2000);
             },
         });
