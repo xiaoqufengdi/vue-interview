@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        let state = {count: 0};  // 变成响应式数据
+        let active;
+        function defineReactive(obj) {
+            for(let key in obj){
+                let value = obj[key];
+                let dep = [];   //每一个属性一个dep数组
+                Object.defineProperty(obj, key, {
+                    get(){
+                        if (active) {   //依赖收集
+                            dep.push(active);
+                        }
+                        return value;
+                    },
+                    set(newValue){  //触发更新
+                        value = newValue;
+                        dep.forEach(watcher=>watcher());
+                    }
+                })
+            }
+        }
+        defineReactive(state);
+
+        //  插入到页面的功能， 需要保存起来
+        const watcher = (fn)=>{
+            active = fn;
+            fn();
+            active = null; //后面再其他地方取值，不触发依赖收集
+        };
+        watcher(()=>{  //相当于初始化--类似于订阅
+            app.innerHTML = state.count; //取值
+
+        });
+        watcher(()=>{
+            console.log(state.count);
+        })
+
+    </script>
+</body>
+</html>

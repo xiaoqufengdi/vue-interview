@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../dist/vue.js"></script>
+</head>
+<body>
+    <script>
+        function mergeHook(parentVal, childVal){
+            if (childVal) {
+                if (parentVal) {
+                    return parentVal.concat(childVal);
+                }else{
+                    return [childVal]; //将钩子函数包装成一个数组
+                }
+
+            }else{
+                return parentVal;
+            }
+
+        }
+
+        function mergeOptions(parent, child) {
+            let opts = {};
+            for(let key in child){
+                opts[key] = mergeHook(parent[key], child[key]);
+            }//合并钩子方法
+
+            return opts;
+        }
+
+        function Vue(options) {//合并操作
+            //内部会将钩子函数转换成一个数组
+            this.options = mergeOptions(this.constructor.options, options);    //options;
+            console.log(this.options);
+            callHook(this, "beforeCreate");
+            callHook(this, "created")
+        }
+        function callHook(vm, hookName){
+            vm.options[hookName]&&vm.options[hookName].forEach(h=>h());
+        }
+
+        // 全局组件--全局过滤
+        Vue.options = { //默认的 全局组件定义了一个a组件， 当前组件也定义了一个a组件
+
+        };
+        Vue.minin = function (obj) {
+            // 把vue.options中的beforeCreate变成了数组
+            // this.options[beforeCreate] = [fn]
+            this.options = mergeOptions(this.options, obj);
+            console.log(this.options);
+        };
+        Vue.minin({ // minin可以提供全局数据 （数据不是共享的）
+            data(){
+                return {a: 1}
+            },
+            beforeCreate(){
+                console.log("minin before create ok");
+            }  //先执行全局混入的方法，再执行自己的
+        });
+
+        new Vue({
+            beforeCreate(){
+                console.log("before create ok");
+            },
+            created(){
+                console.log("created");
+            }
+        })
+
+    </script>
+</body>
+</html>

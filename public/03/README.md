@@ -39,12 +39,7 @@
 4）sync只用在组件上，v-model用在标签和组件上都可以
 
 2. 自定义组件使用v-model如果想要改变事件名或者属性名应该怎么做
-在子组件里面设置model对象里面设置prop属性和事件名change
-
-
-
-
-
+在子组件里面设置model对象里面设置prop属性和事件名event 
 
 
 知其所以然：测试代码，[test.html](./test.html)

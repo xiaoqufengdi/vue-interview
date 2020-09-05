@@ -20,11 +20,14 @@
       el: '#app',
       mounted(){
           console.log("finish");
+          setTimeout(()=>{
+              this.items[0].isActive = false;
+          }, 3000)
       },
       data() {
         return {
           items: [
-            { id: 1, name: '张三', isActive: true },
+            { id: 1, name: '张三111', isActive: true },
             { id: 2, name: '李四', isActive: false },
               { id: 3, name: '张三', isActive: true },
               { id: 4, name: '李四', isActive: false },
