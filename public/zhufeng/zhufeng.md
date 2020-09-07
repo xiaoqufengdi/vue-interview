@@ -29,6 +29,27 @@
 >补充 mixin中有很多缺陷，“命名冲突问题”、“数据来源问题” vue3中去掉该语法
 
 ##nextTick在哪里使用？原理是？
-+ 
++ nextTick中回调是在下次dom更新循环结束之后执行的延迟回调。在修改数据之后立即使用这个方法，获取更新后的DOM。
+原理就是异步方法（promise\mutationObserver\setImmediate\setTimeout）经常与事件循环一起问（宏任务、微任务）
+>vue 多次更新数据，最终会进行批处理，内部调用的就是nextTick实现延迟更新。
 
 
+##Vue为什么需要虚拟DOM？
++ virtual DOM 就是用js对象来描述真实DOM,是对真实DOM的抽象，由于直接操作DOM性能低但是js操作效率高，可以将DOM操作转化为对象操作，最终通过diff算法对比差异进行更新DOM
+虚拟DOM不依赖真实平台环境也可以实现跨平台。
+
+##vue中的diff原理
++ vue的diff算法是平级比较，不考虑跨层级比较。内部采用深度递归+双指针的方式进行比较
+
+##Vue.set方法是如何实现的？
++ 为什么$set可以触发更新，我们给对象和数组本身都增加了dep属性。给对象新增不存在的属性则触发对象依赖的watcher去更新，当修改数组索引是我们调用数组本身的splice方法去更新数组
+
+##Vue生命周期有哪些？一般在哪一步发起请求及原因
++ beforeCreate 在实例化之后，观测(data observer)和event/watcher事件配置之前被调用
++ created 实例已经创建完成之后被调用
++ beforeMount 在挂载之前被调用：相关的render函数首次被调用
++ mounted el被新创建的vm.$el替换，并挂载到实例上去之后调用改钩子，可以进行DOM操作  http请求
++ beforeUpdate 数据更新是调用， 发生在虚拟dom重新渲染和打补丁之间
++ updated 数据变更，重新渲染之后
++ beforeDestroy 实例销毁之前调用。这一步，实例依然可用
++ destroyed Vue实例销毁之后调用  清除定时器
